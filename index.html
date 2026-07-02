@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>EcoPulse AI — Carbon Habit Coach</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <div>
+        <span class="tag">Climate Tech Portfolio Project</span>
+        <h1>EcoPulse AI</h1>
+        <p>
+          Track daily sustainability actions, estimate carbon impact, monitor eco habits,
+          unlock green badges, and receive AI-style recommendations to reduce your footprint.
+        </p>
+
+        <div class="hero-actions">
+          <button onclick="scrollToForm()">Add Eco Action</button>
+          <button class="ghost" onclick="generateChallenge()">Generate Challenge</button>
+          <button class="ghost" onclick="loadDemoData()">Load Demo Data</button>
+          <button class="ghost" onclick="exportCSV()">Export CSV</button>
+          <button class="danger" onclick="resetData()">Reset Data</button>
+        </div>
+      </div>
+
+      <div class="hero-card">
+        <span>Eco Score</span>
+        <h2 id="heroScore">0%</h2>
+        <p id="heroStatus">Start tracking your eco actions</p>
+
+        <div class="progress-bg">
+          <div id="heroProgress"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <span>Total Actions</span>
+        <strong id="totalActions">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>CO₂ Avoided</span>
+        <strong id="co2Avoided">0 kg</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>CO₂ Produced</span>
+        <strong id="co2Produced">0 kg</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Net Impact</span>
+        <strong id="netImpact">0 kg</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Current Streak</span>
+        <strong id="currentStreak">0 days</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Weekly Actions</span>
+        <strong id="weeklyActions">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Eco Categories</span>
+        <strong id="categoryCount">0</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Current Badge</span>
+        <strong id="currentBadge">Starter</strong>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card" id="ecoForm">
+        <h2>Add Eco Action</h2>
+
+        <label for="actionTitle">Action Title</label>
+        <input id="actionTitle" type="text" placeholder="Example: Took public transport instead of driving" />
+
+        <label for="category">Category</label>
+        <select id="category">
+          <option>Transport</option>
+          <option>Energy</option>
+          <option>Food</option>
+          <option>Waste</option>
+          <option>Water</option>
+          <option>Shopping</option>
+          <option>Digital Usage</option>
+          <option>Tree Planting</option>
+        </select>
+
+        <div class="mini-grid">
+          <div>
+            <label for="impactType">Impact Type</label>
+            <select id="impactType">
+              <option value="avoided">Positive Action / CO₂ Avoided</option>
+              <option value="produced">Carbon Activity / CO₂ Produced</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="activityValue">Activity Value</label>
+            <input id="activityValue" type="number" value="1" min="0" step="0.1" />
+          </div>
+        </div>
+
+        <div class="mini-grid">
+          <div>
+            <label for="unit">Unit</label>
+            <select id="unit">
+              <option value="km">km</option>
+              <option value="kwh">kWh</option>
+              <option value="meal">meal</option>
+              <option value="kg">kg</option>
+              <option value="item">item</option>
+              <option value="liter">liter</option>
+              <option value="hour">hour</option>
+              <option value="tree">tree</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="actionDate">Date</label>
+            <input id="actionDate" type="date" />
+          </div>
+        </div>
+
+        <label for="notes">Notes / Reflection</label>
+        <textarea id="notes" placeholder="What did you do? Why was it useful? What can you improve next?"></textarea>
+
+        <button onclick="addAction()">Add Eco Action</button>
+        <button class="secondary" onclick="generateChallenge()">Generate Random Challenge</button>
+        <button class="dark" onclick="exportJSON()">Export JSON</button>
+        <button class="danger" onclick="resetData()">Reset Data</button>
+      </div>
+
+      <div class="card">
+        <h2>AI-Style Eco Coach</h2>
+
+        <div id="challengeBox" class="challenge-box">
+          <h3>No active challenge yet</h3>
+          <p>Generate a challenge to receive a practical sustainability mission.</p>
+          <button onclick="generateChallenge()">Generate Challenge</button>
+        </div>
+
+        <div class="insight-box">
+          <h3 id="insightTitle">No insight yet</h3>
+          <p id="insightText">Add your first eco action to receive a personalized sustainability insight.</p>
+        </div>
+
+        <div class="badge-box">
+          <h3>Unlocked Green Badges</h3>
+          <div id="badgeList">
+            <p class="empty-text">No badges unlocked yet.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="layout second">
+      <div class="card">
+        <h2>Carbon Breakdown</h2>
+
+        <h3>Category Impact</h3>
+        <div id="categoryBreakdown">
+          <p class="empty-text">No category data yet.</p>
+        </div>
+
+        <h3>Impact Type Breakdown</h3>
+        <div id="typeBreakdown">
+          <p class="empty-text">No impact data yet.</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Eco Report</h2>
+
+        <div class="report-box">
+          <h3>Sustainability Summary</h3>
+          <p id="ecoSummary">
+            Add eco actions to generate your sustainability summary.
+          </p>
+        </div>
+
+        <button onclick="copySummary()">Copy Summary</button>
+        <button class="secondary" onclick="printReport()">Print Report</button>
+
+        <h3>Weekly Eco Trend</h3>
+        <div id="weeklyTrend" class="trend-box">
+          <p class="empty-text">No weekly trend yet.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card history-card">
+      <div class="history-header">
+        <div>
+          <h2>Eco Action History</h2>
+          <p>Search, filter, review, and manage your sustainability actions.</p>
+        </div>
+
+        <div class="filters">
+          <input id="searchInput" type="text" placeholder="Search actions..." oninput="renderApp()" />
+
+          <select id="filterCategory" onchange="renderApp()">
+            <option>All Categories</option>
+          </select>
+
+          <select id="filterType" onchange="renderApp()">
+            <option>All Types</option>
+            <option value="avoided">CO₂ Avoided</option>
+            <option value="produced">CO₂ Produced</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="historyList" class="history-grid">
+        <div class="empty-box wide">
+          <h3>No eco actions found</h3>
+          <p>Add your first action or load demo data to start tracking your sustainability progress.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
